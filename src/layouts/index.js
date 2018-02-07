@@ -5,21 +5,15 @@ import Helmet from 'react-helmet'
 import Header from '../components/Header'
 import './index.css'
 
+import favicon from "../images/favicon.ico"
+
 const TemplateWrapper = ({ children }) => (
   <div>
-    <Helmet
-      title="賃貸管理 | Smart賃貸"
-      meta={[
-        {
-          name: 'description',
-          content: 'Smart賃貸はスマートな賃貸管理によって家賃収入の最大化を目指す管理会社です。'
-        },
-        {
-          name: 'keywords',
-          content: '賃貸, 管理'
-        },
-      ]}
-    />
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Smart賃貸</title>
+      <link rel="shortcut icon" href={favicon} />
+    </Helmet>
     <Header />
     <div
       style={{
