@@ -1,1 +1,3 @@
 voicha mvp
+
+./ngrok http 8080
