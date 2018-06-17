@@ -1,10 +1,12 @@
 
 # [START app]
 import os
+import io
 import sys
 import logging
 import tempfile
 import errno
+from argparse import ArgumentParser
 
 from flask import Flask, request, abort
 
@@ -20,8 +22,13 @@ from linebot.models import (
     MessageEvent, TextMessage, AudioMessage, TextSendMessage
 )
 
+from google.cloud import speech
+from google.cloud.speech import enums
+from google.cloud.speech import types
+
 app = Flask(__name__)
 
+# for gae
 # channel_access_token = os.environ.get("LINE_ACCESS_TOKEN", None)
 # channel_secret = os.environ.get("LINE_CHANNEL_SECRET", None)
 
@@ -36,11 +43,13 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+speech_client = speech.SpeechClient()
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+test_audio_file = None
 
 # create tmp dir for downloadable content
-def make_static_temp_dir():
+def make_static_tmp_dir():
     try:
         os.makedirs(static_tmp_path)
     except OSError as e:
@@ -88,7 +97,12 @@ def handle_content_message(event):
     else:
         return
 
+    # get_message_content makes http get request to Get Content API
+    # https://devdocs.line.me/en/#get-content
+    # Content.content is audio/x-m4a
     content = line_bot_api.get_message_content(event.message.id)
+    app.logger.info(content.content)
+
     with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=extension+'-', delete=False) as tf:
         for chunk in content.iter_content():
             tf.write(chunk)
