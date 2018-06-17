@@ -2,3 +2,4 @@ Flask==0.12.2
 gunicorn==19.7.1
 line-bot-sdk=1.6.0
 google-cloud-speech=0.34.0
+pydub=0.22.1

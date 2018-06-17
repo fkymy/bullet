@@ -5,5 +5,29 @@ memo:
 ./ngrok http 8080
 source env vars
 
-< Content-Type: audio/x-m4a
+sample rate: 16000Hz (or higher)
+encoding: FLAC or LINEAR16 (PCM)
+language code: ja-JP
+
+ $ afinfo test_audio.m4a
+
+File:           test_audio.m4a
+File type ID:   m4af
+Num Tracks:     1
+----
+Data format:     1 ch,  16000 Hz, 'aac ' (0x00000000) 0 bits/channel, 0 bytes/packet, 1024 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 11.644000 sec
+audio bytes: 23720
+audio packets: 184
+bit rate: 16114 bits per second
+packet size upper bound: 193
+maximum packet size: 193
+audio data file offset: 24576
+optimized
+audio 186304 valid frames + 2112 priming + 0 remainder = 188416
+format list:
+[ 0] format:	  1 ch,  16000 Hz, 'aac ' (0x00000000) 0 bits/channel, 0 bytes/packet, 1024 frames/packet, 0 bytes/frame
+Channel layout: Mono
+----
 

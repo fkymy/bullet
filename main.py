@@ -7,6 +7,7 @@ import logging
 import tempfile
 import errno
 from argparse import ArgumentParser
+from pydub import AudioSegment
 
 from flask import Flask, request, abort
 
@@ -101,7 +102,9 @@ def handle_content_message(event):
     # https://devdocs.line.me/en/#get-content
     # Content.content is audio/x-m4a
     content = line_bot_api.get_message_content(event.message.id)
-    app.logger.info(content.content)
+    # app.logger.info(content.content)
+    app.logger.info(type(content.content))
+    app.logger.info(content.content_type)
 
     with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=extension+'-', delete=False) as tf:
         for chunk in content.iter_content():
@@ -111,10 +114,28 @@ def handle_content_message(event):
     dist_path = tempfile_path + '.' + extension
     dist_name = os.path.basename(dist_path)
     os.rename(tempfile_path, dist_path)
+    
+    aac_audio = AudioSegment.from_file(os.path.join('static', 'tmp', dist_name))
+    aac_audio.export(os.path.join('static', 'tmp', 'preprocessed.FLAC'), format='FLAC')
+    
+    with io.open(os.path.join(os.path.dirname(__file__), 'static', 'tmp', 'preprocessed.FLAC'), 'rb') as af:
+        content = af.read()
+        audio = types.RecognitionAudio(content=content)
+
+    config = types.RecognitionConfig(
+        encoding=enums.RecognitionConfig.AudioEncoding.FLAC,
+        sample_rate_hertz=16000,
+        language_code='ja-JP'
+    )
+
+    response = speech_client.recognize(config, audio)
+    reply = 'transcript:\n'
+    for result in response.results:
+        reply = reply + result.alternatives[0].transcript
 
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
+        TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name) + '\n' + reply)
     )
 
 
