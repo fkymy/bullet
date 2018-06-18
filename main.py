@@ -11,6 +11,8 @@ from argparse import ArgumentParser
 
 from flask import Flask, request, abort
 
+import linebot
+
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -85,7 +87,7 @@ def get_transcripts(audio_data):
         sample_rate_hertz=16000,
         language_code='ja-JP'
     )
-    response = client.recognize(config, audio)
+    response = speech_client.recognize(config, audio)
     return [result.alternatives[0].transcript for result in response.results]
 
 
@@ -116,20 +118,28 @@ def callback():
 def handle_message(event):
     """testers
     """
-    reply = None
-
     if event.message.text == 'ping':
-        reply = TextSendMessage(text='ping')
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='pong')
+        )
 
-    elif event.message.text == 'hm':
-        # with io.open(os.path.join(temporary_path, 'moe.m4a'), 'rb') as af:
-        #     content = af.read()
-        reply = AudioSendMessage(original_content_url=os.path.join(os.path.dirname(__file__), 'moe.m4a'))
+    elif event.message.text == 'moe':
+        # url = request.host_url + 'moe.m4a'
+        # url = os.path.join(os.path.dirname(__file__), 'moe.m4a')
+        # url = 'https://nofile.io/f/59nzWNmtAn6/moe.m4a'
+        url = 'https://file.io/Jvz3hd'
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        reply
-    )
+        try:
+            line_bot_api.reply_message(
+                event.reply_token,
+                AudioSendMessage(
+                    original_content_url=url,
+                    duration=2700
+                )
+            )
+        except linebot.exceptions.LineBotApiError as e:
+            app.logger.exception(e)
 
 
 @handler.add(MessageEvent, message=AudioMessage)
@@ -177,7 +187,7 @@ def handle_content_message(event):
     audio_data = decode_audio(os.path.join(static_tmp_path, dist_name))
     transcripts = get_transcripts(audio_data)
     for transcript in transcripts:
-        reply = reply + transcript.encode('utf-8')
+        reply = reply + transcript
 
     line_bot_api.reply_message(
         event.reply_token,
@@ -196,13 +206,6 @@ def server_error(e):
 
 
 if __name__ == '__main__':
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8080, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
-
     make_static_tmp_dir()
 
     # This is used when running locally. Gunicorn is used to run the
