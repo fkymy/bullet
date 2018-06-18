@@ -42,9 +42,10 @@ channel_secret = os.environ.get("LINE_CHANNEL_SECRET", None)
 
 if channel_secret is None:
     print('env_variable: LINE_CHANNEL_SECRET is not set')
-    sys.exit(1)
+    # sys.exit(1)
 if channel_access_token is None:
     print('env_variable: LINE_ACCESS_TOKEN is not set')
+    # sys.exit(1)
 
 
 line_bot_api = LineBotApi(channel_access_token)
