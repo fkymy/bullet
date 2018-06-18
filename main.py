@@ -34,11 +34,11 @@ from google.cloud.speech import types
 app = Flask(__name__)
 
 # for gae
-# channel_access_token = os.environ.get("LINE_ACCESS_TOKEN", None)
-# channel_secret = os.environ.get("LINE_CHANNEL_SECRET", None)
+channel_access_token = os.environ.get("LINE_ACCESS_TOKEN", None)
+channel_secret = os.environ.get("LINE_CHANNEL_SECRET", None)
 
-channel_access_token = os.getenv("LINE_ACCESS_TOKEN", None)
-channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
+# channel_access_token = os.getenv("LINE_ACCESS_TOKEN", None)
+# channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
 
 if channel_secret is None:
     print('env_variable: LINE_CHANNEL_SECRET is not set')
