@@ -1,4 +1,4 @@
-runtime: python
+runtime: custom
 env: flex
 entrypoint: gunicorn -b :$PORT main:app
 
@@ -16,6 +16,6 @@ resources:
   memory_gb: 0.5
   disk_size_gb: 10
 env_variables:
-  LINE_ACCESS_TOKEN: "EayIwmR9wSGAd2d+c49vjErYHI+myz06mwqhSqdm46RrEehI1NHJ6PvvSBJJdBFIxZtjexNCSVBVLl9Px/jznYaMcpv2ZWwV4BtHWC6mhbjeX+v0KlcfWcRV8fgkuszWcNOlp52rDpu2OsvvtO/ZewdB04t89/1O/w1cDnyilFU="
-  LINE_CHANNEL_TOKEN: "9862032ed68823de2b01b02b6e2ca998"
-  GOOGLE_APPLICATION_CREDENTIALS: "~/voicha-mvp/voicha-mvp-4b03f8fd074e.json"
+  LINE_ACCESS_TOKEN: EayIwmR9wSGAd2d+c49vjErYHI+myz06mwqhSqdm46RrEehI1NHJ6PvvSBJJdBFIxZtjexNCSVBVLl9Px/jznYaMcpv2ZWwV4BtHWC6mhbjeX+v0KlcfWcRV8fgkuszWcNOlp52rDpu2OsvvtO/ZewdB04t89/1O/w1cDnyilFU=
+  LINE_CHANNEL_TOKEN: 9862032ed68823de2b01b02b6e2ca998
+
