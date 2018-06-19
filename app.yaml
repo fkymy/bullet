@@ -15,7 +15,7 @@ resources:
   cpu: 1
   memory_gb: 0.5
   disk_size_gb: 10
+health_check:
+  enable_health_check: False
 env_variables:
-  LINE_ACCESS_TOKEN: EayIwmR9wSGAd2d+c49vjErYHI+myz06mwqhSqdm46RrEehI1NHJ6PvvSBJJdBFIxZtjexNCSVBVLl9Px/jznYaMcpv2ZWwV4BtHWC6mhbjeX+v0KlcfWcRV8fgkuszWcNOlp52rDpu2OsvvtO/ZewdB04t89/1O/w1cDnyilFU=
-  LINE_CHANNEL_TOKEN: 9862032ed68823de2b01b02b6e2ca998
 

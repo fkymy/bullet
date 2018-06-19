@@ -34,27 +34,26 @@ from google.cloud.speech import types
 app = Flask(__name__)
 
 # for gae
-channel_access_token = os.environ.get("LINE_ACCESS_TOKEN", None)
-channel_secret = os.environ.get("LINE_CHANNEL_SECRET", None)
+channel_access_token = os.environ.get("LINE_ACCESS_TOKEN")
+channel_secret = os.environ.get("LINE_CHANNEL_SECRET")
 
-# channel_access_token = os.getenv("LINE_ACCESS_TOKEN", None)
-# channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
+# channel_access_token = os.getenv("LINE_ACCESS_TOKEN")
+# channel_secret = os.getenv("LINE_CHANNEL_SECRET")
 
-if channel_secret is None:
-    print('env_variable: LINE_CHANNEL_SECRET is not set')
-    # sys.exit(1)
-if channel_access_token is None:
-    print('env_variable: LINE_ACCESS_TOKEN is not set')
-    # sys.exit(1)
-
+#if channel_secret is None:
+#    app.logger.exception('env_variable: LINE_CHANNEL_SECRET is not set')
+#    # sys.exit(1)
+#elif channel_access_token is None:
+#    app.logger.exception('env_variable: LINE_ACCESS_TOKEN is not set')
+#    # sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
+handler = WebhookHandle(channel_secret)
 speech_client = speech.SpeechClient()
-
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 test_audio_file = None
+
 
 # create tmp dir for downloadable content
 def make_static_tmp_dir():
